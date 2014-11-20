@@ -1,41 +1,95 @@
 (function(){
 
-  var dataURL = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=Paris,fr&mode=json&units=metric&cnt=2&APPID=57380854bce6937a9ab720e3440efe7c';
+  var xmldoc = require('xmldoc');
+  var ServoClass = require('./Servo'); 
+  var dataURL = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=Paris,fr&mode=xml&units=metric&cnt=7&APPID=57380854bce6937a9ab720e3440efe7c';
+  var todayRain;
+  var tomorrowRain;
+  var buttonState;
 
   // ################################################################# SWITCH BUTTON HANDLING
   var Gpio = require('onoff').Gpio;
   var switchButton = new Gpio(22, 'in', 'both', {debounceTimeout : 0});
-  var state = switchButton.readSync();
+  buttonState = switchButton.readSync();
 
   switchButton.watch(function(err, value) 
   {
       if (err) throw err;
-      if(value != state)
+      if(value != buttonState)
       {
-        state = value;
+        buttonState = value;
         console.log('Button state changed to ' + value);
+        updateUI();
       }
       
   });
 
   // ################################################################# REMOTE JSON DATA HANDLING
-  var JSONDataGetterClass = require('./JSONDataGetter');
-  var JSONDataGetter = JSONDataGetterClass.createInstance(dataURL);
+  var WeatherDataServiceClass = require('./WeatherDataService');
+  var weatherDataService = WeatherDataServiceClass.createInstance(dataURL);
 
-  JSONDataGetter.on('onDataReceived', function(pData){
-    console.log(pData);
+  weatherDataService.on('onDataReceived', function(pData){
+    var xmlData = new xmldoc.XmlDocument(pData);
+    var forecast = xmlData.childNamed("forecast");
+
+    var today = forecast.children[0].children[1].attr.value;
+    var tomorrow = forecast.children[1].children[1].attr.value;
+
+    today ? todayRain = parseFloat(today) : todayRain = 0;
+    tomorrow ? tomorrowRain = parseFloat(tomorrow) : tomorrowRain = 0;
+
+    console.log('weather data ok', todayRain, tomorrowRain);
+
+    updateUI();
+
+    //servo.init();
+
+  });
+
+  weatherDataService.getData();
+
+  // ################################################################# SERVO HANDLING
+  var servo = ServoClass.createInstance(4);
+
+  servo.on('initComplete', function(pPosition){
+    console.log('init complete pos = ' + pPosition);
+    //servo.moveTo(0.214, 1);
+  });
+
+  servo.on('moveComplete', function(pPosition){
+    console.log('move complete pos = ' + pPosition);
+  });
+
+  servo.on('noMoveNeeded', function(pPosition){
+    console.log('no move needed pos = ' + pPosition);
   });
 
   // ################################################################# EXECTUTION
-  if(state == 0)
+  function updateUI()
   {
-    // get the today data
+    if(buttonState == 0) // today
+    {
+      if(todayRain == 0)
+      {
+        servo.moveTo(0.214, 2);
+      }
+      else
+      {
+         servo.moveTo(0.062, 2);
+      }
+    }
+    else // tomorrow
+    {
+      if(tomorrowRain == 0)
+      {
+        servo.moveTo(0.214, 2);
+      }
+      else
+      {
+         servo.moveTo(0.062, 2);
+      }
+    }
   }
-  else
-  {
-  // get the tomorrow data
-  }
-  //JSONDataGetter.getData();
 
 
 })();
