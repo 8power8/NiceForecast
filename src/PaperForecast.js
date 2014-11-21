@@ -64,7 +64,7 @@
     console.log('no move needed pos = ' + pPosition);
   });
 
-  // ################################################################# EXECTUTION
+  // ################################################################# OTHER FUNCTIONS
   function updateUI()
   {
     if(buttonState == 0) // today
