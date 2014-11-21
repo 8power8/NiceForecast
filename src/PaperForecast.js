@@ -38,7 +38,7 @@
     today ? todayRain = parseFloat(today) : todayRain = 0;
     tomorrow ? tomorrowRain = parseFloat(tomorrow) : tomorrowRain = 0;
 
-    console.log('weather data ok', todayRain, tomorrowRain);
+    console.log('weather data ok', 'today: ' + todayRain + ' mm', 'tomorrow: ' + tomorrowRain + ' mm');
 
     updateUI();
 
