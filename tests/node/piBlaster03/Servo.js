@@ -15,20 +15,15 @@ function Servo(pGPIONumber)
 // ######################################################## PRIVATE VARIABLES
 var init = false;
 
-var left = 0.225;
-var center = 0.138;
-var right = 0.048;
+var left = 0.230;
+var center = 0.142;
+var right = 0.050;
 
 var lastPosition = center;
 var position = center;
 var I_moveServoTo;
 
 Servo.prototype = new events.EventEmitter;
-
-Servo.prototype.init = function()
-{
-	this.moveTo(0.048, 3);
-}
 
 Servo.prototype.moveTo = function( pTo, pSpeed )
 {

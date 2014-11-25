@@ -8,7 +8,7 @@
   var buttonState;
 
   // ################################################################# SWITCH BUTTON HANDLING
-  var Gpio = require('onoff').Gpio;
+  /*var Gpio = require('onoff').Gpio;
   var switchButton = new Gpio(22, 'in', 'both', {debounceTimeout : 0});
   buttonState = switchButton.readSync();
 
@@ -22,10 +22,10 @@
         updateUI();
       }
       
-  });
+  });*/
 
   // ################################################################# REMOTE JSON DATA HANDLING
-  var WeatherDataServiceClass = require('./WeatherDataService');
+  /*var WeatherDataServiceClass = require('./WeatherDataService');
   var weatherDataService = WeatherDataServiceClass.createInstance(dataURL);
 
   weatherDataService.on('onDataReceived', function(pData){
@@ -40,13 +40,13 @@
 
     console.log('weather data ok', 'today: ' + todayRain + ' mm', 'tomorrow: ' + tomorrowRain + ' mm');
 
-    updateUI();
+    //updateUI();
 
     //servo.init();
 
   });
 
-  weatherDataService.getData();
+  weatherDataService.getData();*/
 
   // ################################################################# SERVO HANDLING
   var servo = ServoClass.createInstance(4);
@@ -63,6 +63,9 @@
   servo.on('noMoveNeeded', function(pPosition){
     console.log('no move needed pos = ' + pPosition);
   });
+
+  servo.init();
+  //servo.moveTo(0.225, 3);
 
   // ################################################################# OTHER FUNCTIONS
   function updateUI()
