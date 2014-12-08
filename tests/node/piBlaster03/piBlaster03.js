@@ -37,18 +37,18 @@ var RIGHT = 0.048;
     console.log('no move needed pos = ' + pPosition);
   });
 
-  servo.moveTo(RIGHT, 1);
+  servo.moveTo(CENTER);
 
   // ################################################################# OTHER FUNCTIONS
   function updateUI()
   {
     if(buttonState == 0) // today
     {
-      //piblaster.setPwm(4, 0.230);
+      servo.moveTo(RIGHT);
     }
     else
     {
-       //piblaster.setPwm(4, 0.050);
+       servo.moveTo(LEFT);
     }
   }
 

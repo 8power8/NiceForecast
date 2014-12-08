@@ -7,8 +7,12 @@
   var tomorrowRain;
   var buttonState;
 
+  var LEFT = 0.225;
+  var CENTER = 0.138;
+  var RIGHT = 0.048;
+
   // ################################################################# SWITCH BUTTON HANDLING
-  /*var Gpio = require('onoff').Gpio;
+  var Gpio = require('onoff').Gpio;
   var switchButton = new Gpio(22, 'in', 'both', {debounceTimeout : 0});
   buttonState = switchButton.readSync();
 
@@ -22,10 +26,10 @@
         updateUI();
       }
       
-  });*/
+  });
 
   // ################################################################# REMOTE JSON DATA HANDLING
-  /*var WeatherDataServiceClass = require('./WeatherDataService');
+  var WeatherDataServiceClass = require('./WeatherDataService');
   var weatherDataService = WeatherDataServiceClass.createInstance(dataURL);
 
   weatherDataService.on('onDataReceived', function(pData){
@@ -46,15 +50,10 @@
 
   });
 
-  weatherDataService.getData();*/
+  weatherDataService.getData();
 
   // ################################################################# SERVO HANDLING
   var servo = ServoClass.createInstance(4);
-
-  servo.on('initComplete', function(pPosition){
-    console.log('init complete pos = ' + pPosition);
-    //servo.moveTo(0.214, 1);
-  });
 
   servo.on('moveComplete', function(pPosition){
     console.log('move complete pos = ' + pPosition);
@@ -64,13 +63,22 @@
     console.log('no move needed pos = ' + pPosition);
   });
 
-  servo.init();
-  //servo.moveTo(0.225, 3);
+  servo.moveTo(CENTER);
 
   // ################################################################# OTHER FUNCTIONS
   function updateUI()
   {
+
     if(buttonState == 0) // today
+    {
+      servo.moveTo(LEFT);
+    }
+    else // tomorrow
+    {
+      servo.moveTo(RIGHT);
+    }
+
+    /*if(buttonState == 0) // today
     {
       if(todayRain == 0)
       {
@@ -91,7 +99,7 @@
       {
          servo.moveTo(0.062, 2);
       }
-    }
+    }*/
   }
 
 

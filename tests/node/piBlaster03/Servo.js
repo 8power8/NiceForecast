@@ -25,41 +25,15 @@ var I_moveServoTo;
 
 Servo.prototype = new events.EventEmitter;
 
-Servo.prototype.moveTo = function( pTo, pSpeed )
+Servo.prototype.moveTo = function( pTo )
 {
 
 	var to = pTo;
 	var stepWidth;
 	var ms;
 
-	switch(pSpeed)
-	{
-
-		case 1:
-			stepWidth = 0.0006;
-			ms = 40;
-		break;
-
-		case 2:
-			stepWidth = 0.001;
-			ms = 50;
-		break;
-
-		case 3:
-			stepWidth = 0.0015;
-			ms = 25;
-		break;
-
-		case 4:
-			stepWidth = 0.008;
-			ms = 50;
-		break;
-
-		case 5:
-			stepWidth = 0.01;
-			ms = 50;
-		break;
-	}
+	stepWidth = 0.00005;
+	ms = 1;
 
 	I_moveServoTo = setInterval(function(context){
 
